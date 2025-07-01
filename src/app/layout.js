@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Code GPT",
-  description: "Code GPT",
+  title: "AutoDev IQ",
+  description: "AutoDev IQ",
 };
 
 export default function RootLayout({ children }) {
