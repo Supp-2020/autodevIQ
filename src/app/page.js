@@ -5,7 +5,7 @@ import { UploadCode } from "./components/UploadCode";
 
 export default function Home() {
   return (
-    <main className="p-8">
+    <main className="p-6">
       <Navbar />
       <UploadCode />
       <div className="flex gap-8">

@@ -1,10 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FcFolder, FcOpenedFolder } from "react-icons/fc";
 import { IoIosArrowDown, IoIosArrowForward } from "react-icons/io";
 import { PiDotOutlineFill } from "react-icons/pi";
+import { buildNestedTree } from "../utils/buildNestedTree";
 
-const folderStructureData = [
+/* const folderStructureData = [
   {
     folder: "public",
     child: [{ file: "favicon.ico" }, { file: "robots.txt" }],
@@ -26,14 +27,33 @@ const folderStructureData = [
   {
     file: "package.json",
   },
-];
-export const FolderStructure = () => (
-  <section className="w-[40%] bg-white p-4 rounded-xl shadow-md border border-gray-300 text-sm font-mono">
-    {folderStructureData.map((node, idx) => (
-      <FolderNode key={idx} node={node} />
-    ))}
-  </section>
-);
+]; */
+export const FolderStructure = () => {
+  const [folderStructureData, setFolderStructureData] =useState([])
+      useEffect(() => {
+    const fetchTree = async () => {
+      try {
+        const res = await fetch(
+          "https://api.github.com/repos/Kruthik71/WeCare/git/trees/master?recursive=1"
+        );
+        const data = await res.json();
+        const nestedData = buildNestedTree(data.tree)
+        setFolderStructureData(nestedData)
+      } catch(error) {
+        console.log(error)
+      }
+    }
+
+    fetchTree();
+  }, []);
+  return (
+    <section className="w-[40%] bg-white p-4 rounded-xl shadow-md border border-gray-300 text-sm font-mono">
+      {folderStructureData?.map((node, idx) => (
+        <FolderNode key={idx} node={node} />
+      ))}
+    </section>
+  )
+};
 
 const FolderNode = ({ node }) => {
   const [isOpen, setIsOpen] = useState(node.defaultOpen || false);
